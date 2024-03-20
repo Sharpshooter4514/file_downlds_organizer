@@ -1,5 +1,3 @@
-# pip install watchdog
-
 import os
 import time
 import shutil
@@ -29,10 +27,17 @@ class DownloadFolderHandler(FileSystemEventHandler):
         if filename.lower().endswith('.tmp') or filename.lower().startswith('crdownload') or filename.lower().endswith('crdownload'):
             print(f"Skipping temporary or incomplete file: {filename}")
             return
-        if is_file_stable(filepath):
-            self.organize_file(filepath)
-        else:
-            print(f"File is not stable or was removed: {filename}")
+        while True:
+            if not os.path.exists(filepath):
+                print('File not available yet, waiting...')
+                time.sleep(0.25)
+                return True
+            else:
+                if is_file_stable(filepath):
+                    self.organize_file(filepath)
+                else:
+                    print(f"File is not stable or was removed: {filename}")
+                return False
 
     def on_created(self, event):
         if not event.is_directory:
