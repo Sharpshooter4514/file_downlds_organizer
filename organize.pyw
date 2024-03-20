@@ -26,7 +26,7 @@ class DownloadFolderHandler(FileSystemEventHandler):
         """Process the file if it's stable and not a temporary file."""
         filename = os.path.basename(filepath)
         # Skip temporary or incomplete files
-        if filename.lower().endswith('.tmp') or filename.lower().startswith('crdownload'):
+        if filename.lower().endswith('.tmp') or filename.lower().startswith('crdownload') or filename.lower().endswith('crdownload'):
             print(f"Skipping temporary or incomplete file: {filename}")
             return
         if is_file_stable(filepath):
